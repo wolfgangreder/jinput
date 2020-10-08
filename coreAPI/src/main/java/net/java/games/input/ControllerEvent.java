@@ -4,7 +4,7 @@
  * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
-/*****************************************************************************
+/** ***************************************************************************
  * Copyright (c) 2003 Sun Microsystems, Inc.  All Rights Reserved.
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -25,7 +25,7 @@
  * ANY IMPLIED WARRANT OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR
  * NON-INFRINGEMEN, ARE HEREBY EXCLUDED.  SUN MICROSYSTEMS, INC. ("SUN") AND
  * ITS LICENSORS SHALL NOT BE LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE AS
- * A RESULT OF USING, MODIFYING OR DESTRIBUTING THIS SOFTWARE OR ITS 
+ * A RESULT OF USING, MODIFYING OR DESTRIBUTING THIS SOFTWARE OR ITS
  * DERIVATIVES.  IN NO EVENT WILL SUN OR ITS LICENSORS BE LIABLE FOR ANY LOST
  * REVENUE, PROFIT OR DATA, OR FOR DIRECT, INDIRECT, SPECIAL, CONSEQUENTIAL,
  * INCIDENTAL OR PUNITIVE DAMAGES.  HOWEVER CAUSED AND REGARDLESS OF THE THEORY
@@ -35,27 +35,33 @@
  * You acknowledge that this software is not designed or intended for us in
  * the design, construction, operation or maintenance of any nuclear facility
  *
- *****************************************************************************/
+ **************************************************************************** */
 package net.java.games.input;
 
 /**
  * An event that is fired when the state of a controller changes
  */
-public class ControllerEvent {
+public class ControllerEvent
+{
 
-    private Controller controller;
+  private final Controller controller;
+  private final ControllerAction action;
 
-    /**
-     * Creates a controller event object.
-     */
-    public ControllerEvent(Controller c) {
-        controller = c;
-    }
+  public ControllerEvent(Controller c,
+                         ControllerAction action)
+  {
+    controller = c;
+    this.action = action;
+  }
 
-    /**
-     * Returns the controller for this event.
-     */
-    public Controller getController() {
-        return controller;
-    }
+  public Controller getController()
+  {
+    return controller;
+  }
+
+  public ControllerAction getAction()
+  {
+    return action;
+  }
+
 } // class ControllerEvent
