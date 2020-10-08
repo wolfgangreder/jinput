@@ -35,7 +35,6 @@ final class LinuxInputID
   private final int vendor;
   private final int product;
   private final int version;
-  private String nativeId;
 
   public LinuxInputID(int bustype,
                       int vendor,
@@ -63,12 +62,13 @@ final class LinuxInputID
     return result.append(tmp).toString();
   }
 
-  public synchronized String getNativeId()
+  public synchronized ControllerId getNativeId(String type)
   {
-    if (nativeId == null) {
-      nativeId = hexString(bustype) + ":" + hexString(vendor) + ":" + hexString(product) + ":" + hexString(version);
-    }
-    return nativeId;
+    return new ControllerId(type,
+                            hexString(bustype),
+                            hexString(vendor),
+                            hexString(product),
+                            hexString(version));
   }
 
   public final String toString()

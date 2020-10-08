@@ -47,7 +47,11 @@ final class AWTMouse extends Mouse implements AWTEventListener
 
   private final List<AWTEvent> awt_events = new ArrayList<>();
   private final List<AWTEvent> processed_awt_events = new ArrayList<>();
-
+  private final ControllerId id = new ControllerId("ms",
+                                                   "0000",
+                                                   "0000",
+                                                   "0000",
+                                                   "0000");
   private int event_state = EVENT_X;
 
   protected AWTMouse()
@@ -61,9 +65,9 @@ final class AWTMouse extends Mouse implements AWTEventListener
   }
 
   @Override
-  public String getId()
+  public ControllerId getId()
   {
-    return toString();
+    return id;
   }
 
   private final static Component[] createComponents()

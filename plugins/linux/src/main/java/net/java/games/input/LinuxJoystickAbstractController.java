@@ -63,7 +63,7 @@ final class LinuxJoystickAbstractController extends AbstractController
   }
 
   @Override
-  public String getId()
+  public ControllerId getId()
   {
     return device.getId();
   }

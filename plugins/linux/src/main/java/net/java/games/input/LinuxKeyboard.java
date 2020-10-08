@@ -65,7 +65,7 @@ final class LinuxKeyboard extends Keyboard
   }
 
   @Override
-  public String getId()
+  public ControllerId getId()
   {
     return device.getId();
   }

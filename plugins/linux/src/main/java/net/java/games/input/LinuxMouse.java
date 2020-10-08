@@ -65,7 +65,7 @@ final class LinuxMouse extends Mouse
   }
 
   @Override
-  public String getId()
+  public ControllerId getId()
   {
     return device.getId();
   }

@@ -48,7 +48,7 @@ package net.java.games.input;
 public interface Controller
 {
 
-  public String getId();
+  public ControllerId getId();
 
   /**
    * Returns the controllers connected to make up this controller, or

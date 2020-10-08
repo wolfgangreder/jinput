@@ -45,6 +45,11 @@ final class AWTKeyboard extends Keyboard implements AWTEventListener
   private final List<KeyEvent> awt_events = new ArrayList<>();
   private Event[] processed_events;
   private int processed_events_index;
+  private final ControllerId id = new ControllerId("kb",
+                                                   "0000",
+                                                   "0000",
+                                                   "0000",
+                                                   "0000");
 
   protected AWTKeyboard()
   {
@@ -58,9 +63,9 @@ final class AWTKeyboard extends Keyboard implements AWTEventListener
   }
 
   @Override
-  public String getId()
+  public ControllerId getId()
   {
-    return toString();
+    return id;
   }
 
   private final static Component[] createComponents()

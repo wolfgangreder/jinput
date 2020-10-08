@@ -90,9 +90,9 @@ final class LinuxEventDevice implements LinuxDevice
                                          boolean rw) throws IOException;
 
   @Override
-  public String getId()
+  public ControllerId getId()
   {
-    return "ev:" + input_id.getNativeId();
+    return input_id.getNativeId("ev");
   }
 
   private String readFile(String fileName) throws IOException

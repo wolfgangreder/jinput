@@ -20,7 +20,7 @@ public class LinuxCombinedController extends AbstractController
   }
 
   @Override
-  public String getId()
+  public ControllerId getId()
   {
     return eventController.getId();
   }

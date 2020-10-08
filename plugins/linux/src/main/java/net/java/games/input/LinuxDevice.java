@@ -33,7 +33,7 @@ import java.io.IOException;
 interface LinuxDevice
 {
 
-  public String getId();
+  public ControllerId getId();
 
   void close() throws IOException;
 

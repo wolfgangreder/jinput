@@ -57,7 +57,7 @@ final class LinuxJoystickDevice implements LinuxDevice
   private final Map<Integer, LinuxJoystickPOV> povYs = new HashMap<>();
   private final byte[] axisMap;
   private final char[] buttonMap;
-  private final String id;
+  private final ControllerId id;
   private EventQueue event_queue;
 
   /* Closed state variable that protects the validity of the file descriptor.
@@ -83,7 +83,7 @@ final class LinuxJoystickDevice implements LinuxDevice
   }
 
   @Override
-  public String getId()
+  public ControllerId getId()
   {
     return id;
   }
@@ -106,7 +106,7 @@ final class LinuxJoystickDevice implements LinuxDevice
     return tmp.toString();
   }
 
-  private String getId(String filename) throws IOException
+  private ControllerId getId(String filename) throws IOException
   {
     String idPath = filename.replace("/dev",
                                      "/sys/class") + "/device/id/";
@@ -114,7 +114,11 @@ final class LinuxJoystickDevice implements LinuxDevice
     String product = readFile(idPath + "product");
     String vendor = readFile(idPath + "vendor");
     String version = readFile(idPath + "version");
-    return "js:" + bustype + ":" + vendor + ":" + product + ":" + version;
+    return new ControllerId("js:",
+                            bustype,
+                            vendor,
+                            product,
+                            version);
   }
 
   private final static native long nOpen(String filename) throws IOException;
