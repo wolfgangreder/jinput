@@ -26,8 +26,10 @@
 package net.java.games.input;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
@@ -38,7 +40,8 @@ import java.util.List;
 import java.util.logging.Level;
 import net.java.games.util.plugins.Plugin;
 
-/** Environment plugin for linux
+/**
+ * Environment plugin for linux
  *
  * @author elias
  * @author Jeremy Booth (jeremy@newdawnsoftware.com)
@@ -48,6 +51,8 @@ public final class LinuxEnvironmentPlugin extends ControllerEnvironment implemen
 
   private final static String LIBNAME = "jinput-linux";
   private final static String POSTFIX64BIT = "64";
+  private final static String POSTFIXARM32 = "_arm";
+  private final static String POSTFIXARM64 = "_arm64";
   private static boolean supported = false;
   private final Object lock = new Object();
   private List<Controller> _controllers;
@@ -55,10 +60,8 @@ public final class LinuxEnvironmentPlugin extends ControllerEnvironment implemen
   private final static LinuxDeviceThread _device_thread = new LinuxDeviceThread();
 
   /**
-   * Static utility method for loading native libraries.
-   * It will try to load from either the path given by
-   * the net.java.games.input.librarypath property
-   * or through System.loadLibrary().
+   * Static utility method for loading native libraries. It will try to load from either the path given by the
+   * net.java.games.input.librarypath property or through System.loadLibrary().
    *
    */
   static void loadLibrary(final String lib_name)
@@ -94,15 +97,64 @@ public final class LinuxEnvironmentPlugin extends ControllerEnvironment implemen
                                                                                              default_value));
   }
 
+  static String exposeLib(String libName)
+  {
+    String mappedName = System.mapLibraryName(libName);
+    InputStream strm = LinuxEnvironmentPlugin.class.getResourceAsStream("/" + mappedName);
+    if (strm != null) {
+      try {
+        File tmpFile = File.createTempFile("jinput",
+                                           ".so");
+        tmpFile.deleteOnExit();
+        try (FileOutputStream fos = new FileOutputStream(tmpFile)) {
+          strm.transferTo(fos);
+        }
+        return tmpFile.getAbsolutePath();
+      } catch (IOException ex) {
+        LOGGER.log(Level.SEVERE,
+                   null,
+                   ex);
+      }
+    }
+    return null;
+  }
+
   static {
     String osName = getPrivilegedProperty("os.name",
                                           "").trim();
     if (osName.equals("Linux")) {
-      supported = true;
-      if ("i386".equals(getPrivilegedProperty("os.arch"))) {
-        loadLibrary(LIBNAME);
+      String arch = getPrivilegedProperty("os.arch");
+      String dataModel = getPrivilegedProperty("sun.arch.data.model");
+      String libName;
+      switch (arch) {
+        case "i386":
+          libName = LIBNAME;
+          break;
+        case "arm":
+          if ("64".equals(dataModel)) {
+            libName = LIBNAME + POSTFIXARM64;
+          } else {
+            libName = LIBNAME + POSTFIXARM32;
+          }
+          break;
+        default:
+          libName = LIBNAME + POSTFIX64BIT;
+      }
+      supported = libName != null;
+      if (libName != null) {
+        LOGGER.log(Level.INFO,
+                   "Loading native lib {0}",
+                   libName);
+        String tmpFile = exposeLib(libName);
+        if (tmpFile != null) {
+          Runtime.getRuntime().load(tmpFile);
+        } else {
+          loadLibrary(libName);
+        }
       } else {
-        loadLibrary(LIBNAME + POSTFIX64BIT);
+        LOGGER.log(Level.SEVERE,
+                   "No supported linux {0} {1}",
+                   new Object[]{arch, dataModel});
       }
     }
   }
@@ -126,11 +178,12 @@ public final class LinuxEnvironmentPlugin extends ControllerEnvironment implemen
     }
   }
 
-  /** Returns a list of all controllers available to this environment,
-   * or an empty array if there are no controllers in this environment.
+  /**
+   * Returns a list of all controllers available to this environment, or an empty array if there are no controllers in this
+   * environment.
    *
-   * @return Returns a list of all controllers available to this environment,
-   * or an empty array if there are no controllers in this environment.
+   * @return Returns a list of all controllers available to this environment, or an empty array if there are no controllers in
+   * this environment.
    */
   @Override
   public final List<Controller> getControllers()

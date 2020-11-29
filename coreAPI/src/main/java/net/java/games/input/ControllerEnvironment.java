@@ -45,33 +45,26 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * A ControllerEnvironment represents a collection of controllers that are
- * physically or logically linked. By default, this corresponds to the
- * environment for the local machine.
+ * A ControllerEnvironment represents a collection of controllers that are physically or logically linked. By default, this
+ * corresponds to the environment for the local machine.
  * <p>
- * In this reference implementation, this class can also be used to register
- * controllers with the default environment as "plug-ins". A plug-in is
- * created by subclassing ControllerEnvironment with a class that has a public
- * no-argument constructor, implements the net.java.games.util.plugins.Plugin
- * interface and has a name ending in "Plugin".
- * (See net.java.games.input.DirectInputEnvironmentPlugin in the DXplugin
- * part of the source tree for an example.)
+ * In this reference implementation, this class can also be used to register controllers with the default environment as
+ * "plug-ins". A plug-in is created by subclassing ControllerEnvironment with a class that has a public no-argument constructor,
+ * implements the net.java.games.util.plugins.Plugin interface and has a name ending in "Plugin". (See
+ * net.java.games.input.DirectInputEnvironmentPlugin in the DXplugin part of the source tree for an example.)
  *
- * When the DefaultControllerEnvrionment is instanced it uses the plugin library
- * to look for Plugins in both [java.home]/lib/controller and
- * [user.dir]/controller. This allows controller plugins to be installed either
- * globally for the entire Java environment or locally for just one particular
- * Java app.
+ * When the DefaultControllerEnvrionment is instanced it uses the plugin library to look for Plugins in both
+ * [java.home]/lib/controller and [user.dir]/controller. This allows controller plugins to be installed either globally for the
+ * entire Java environment or locally for just one particular Java app.
  *
- * For more information on the organization of plugins within the controller
- * root directories, see net.java.games.util.plugins.Plugins (Note the
- * plural -- "Plugins" not "Plugin" which is just a marker interface.)
+ * For more information on the organization of plugins within the controller root directories, see
+ * net.java.games.util.plugins.Plugins (Note the plural -- "Plugins" not "Plugin" which is just a marker interface.)
  *
  */
 public abstract class ControllerEnvironment
 {
 
-  protected static final Logger LOGGER = Logger.getLogger(ControllerEnvironment.class.getName());
+  protected static final Logger LOGGER = Logger.getLogger("net.java.games.input");
 
   static void log(String msg)
   {
@@ -103,8 +96,8 @@ public abstract class ControllerEnvironment
   public abstract void rescanController();
 
   /**
-   * Returns a list of all controllers available to this environment,
-   * or an empty array if there are no controllers in this environment.
+   * Returns a list of all controllers available to this environment, or an empty array if there are no controllers in this
+   * environment.
    */
   public abstract List<Controller> getControllers();
 
@@ -118,9 +111,8 @@ public abstract class ControllerEnvironment
   }
 
   /**
-   * Returns the isSupported status of this environment.
-   * What makes an environment supported or not is up to the
-   * particular plugin, but may include OS or available hardware.
+   * Returns the isSupported status of this environment. What makes an environment supported or not is up to the particular
+   * plugin, but may include OS or available hardware.
    */
   public abstract boolean isSupported();
 
@@ -134,8 +126,7 @@ public abstract class ControllerEnvironment
   }
 
   /**
-   * Creates and sends an event to the controller listeners that a controller
-   * has been added.
+   * Creates and sends an event to the controller listeners that a controller has been added.
    */
   protected void fireControllerAdded(Controller c)
   {
@@ -147,8 +138,7 @@ public abstract class ControllerEnvironment
   }
 
   /**
-   * Creates and sends an event to the controller listeners that a controller
-   * has been lost.
+   * Creates and sends an event to the controller listeners that a controller has been lost.
    */
   protected void fireControllerRemoved(Controller c)
   {
@@ -160,8 +150,7 @@ public abstract class ControllerEnvironment
   }
 
   /**
-   * Returns the default environment for input controllers.
-   * This usually corresponds to the environment for the local machine.
+   * Returns the default environment for input controllers. This usually corresponds to the environment for the local machine.
    */
   public static ControllerEnvironment getDefaultEnvironment()
   {
